@@ -1,0 +1,9 @@
+<h1>Here's the forecast</h1>
+
+<% if @weather_data %>
+  <p>Current Temperature: <%= @weather_data["current"]["temp_f"] %>&deg;F / <%= @weather_data["current"]["temp_c"] %>&deg;C</p>
+<% else %>
+  <p>Sorry, current temperature could not be retrieved. Please try again.</p>
+<% end %>
+
+<%= link_to "Check another zip code", root_path %>

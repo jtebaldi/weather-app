@@ -1,0 +1,7 @@
+<h1>Check the temperature</h1>
+
+<%= form_with url: weather_path, method: :get, local: true do |form| %>
+  <%= form.label :zip_code, "Enter Zip Code" %>
+  <%= form.text_field :zip_code, placeholder: "28206", required: true %>
+  <%= form.submit "Get Temperature" %>
+<% end %>

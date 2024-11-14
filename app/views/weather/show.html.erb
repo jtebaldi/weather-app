@@ -1,10 +1,12 @@
 <h1>Here's the forecast</h1>
 
-<% if @realtime_weather_data %>
-  <p>Current Temperature: <%= @realtime_weather_data["current"]["temp_f"] %>&deg;F / <%= @realtime_weather_data["current"]["temp_c"] %>&deg;C</p>
-  <p>(<strong>Data Source</strong> <%= @cached ? "Cached" : "Fresh from API" %>)</p>
+<% if @weather_data %>
+  <p>Current Temperature: <%= @weather_data.dig(:current, "temp_f") %>&deg;F / <%= @weather_data.dig(:current, "temp_c") %>&deg;C</p>
+  <p>High Temperature: <%= @weather_data.dig(:forecast, "maxtemp_f") %>&deg;F / <%= @weather_data.dig(:forecast, "maxtemp_c") %>&deg;C</p>
+  <p>Low Temperature: <%= @weather_data.dig(:forecast, "mintemp_f") %>&deg;F / <%= @weather_data.dig(:forecast, "mintemp_c") %>&deg;C</p>
+  <p><small>(Data Source: <%= @cached ? "Cached" : "Fresh from API" %>)</small></p>
 <% else %>
-  <p>Sorry, current temperature could not be retrieved. Please try again.</p>
+  <p>Sorry, weather data could not be retrieved. Please try again.</p>
 <% end %>
 
 <%= link_to "Check another zip code", root_path %>

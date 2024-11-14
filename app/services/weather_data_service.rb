@@ -24,6 +24,9 @@ class WeatherDataService
     real_time_data = get_weather_data('/current.json', { q: zip_code })
     forecast_data = get_weather_data('/forecast.json', { q: zip_code, days: 1 })
 
+    # Return nil if either API call fails
+    return { data: nil, cached: false } if real_time_data.nil? || forecast_data.nil?
+
     # Combine data into one result
     combined_data = {
       current: real_time_data["current"],
@@ -43,12 +46,9 @@ class WeatherDataService
   # - params (Hash): Query parameters for the API request
   def get_weather_data(endpoint, params)
     response = self.class.get(endpoint, query: params.merge(key: ENV['WEATHER_API_KEY']))
-    response.success? ? response.parsed_response : log_error("Error fetching weather data: #{response.message}")
-  end
+    return response.parsed_response if response.success?
 
-  # Logs errors encountered during API calls
-  def log_error(message)
-    Rails.logger.error(message)
+    Rails.logger.error("Error fetching weather data: #{response.message}")
     nil
   end
 

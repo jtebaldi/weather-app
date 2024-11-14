@@ -2,6 +2,6 @@
 
 <%= form_with url: weather_path, method: :get, local: true do |form| %>
   <%= form.label :zip_code, "Enter Zip Code" %>
-  <%= form.text_field :zip_code, placeholder: "28206", required: true %>
+  <%= text_field_tag :zip_code, nil, pattern: "\\d{5}", title: "Please enter a 5-digit zip code", placeholder: "28206", required: true %>
   <%= form.submit "Get Temperature" %>
 <% end %>

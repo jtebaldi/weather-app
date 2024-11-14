@@ -79,4 +79,4 @@ The app uses Redis to cache weather data for each zip code for 30 minutes. The c
 
 ## App production version
 
-Check out a live version of the app at: https://weather-forecase-app-0429e1d65a9d.herokuapp.com/
+Check out a live version of the app at: https://weather-temp-app-d2ed7f70d96b.herokuapp.com/

@@ -31,7 +31,7 @@ gem "jbuilder"
 gem "redis", "~> 4.0"
 
 # Use HTTParty to communicate with external APIs
-gem 'httparty', '~> 0.22.0'
+gem "httparty", '~> 0.22.0'
 
 # Use to load local environment variables
 gem 'dotenv-rails', groups: [:development, :test]
@@ -69,4 +69,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem "rspec-rails"
 end

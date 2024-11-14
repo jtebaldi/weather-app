@@ -76,3 +76,7 @@ The app uses Redis to cache weather data for each zip code for 30 minutes. The c
 - app/controllers/weather_controller.rb: Manages user input and data display.
 - app/services/weather_data_service.rb: Handles API requests and caching logic.
 - spec/services/weather_data_service_spec.rb: Tests for API and caching functionality.
+
+## App production version
+
+Check out a live version of the app at: https://weather-forecase-app-0429e1d65a9d.herokuapp.com/

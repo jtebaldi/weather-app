@@ -12,38 +12,37 @@ class WeatherDataService
   # Fetches real-time weather data for a given zip code, with caching
   # Params:
   # - zip_code (String): The zip code for which to retrieve weather data
-  def fetch_realtime_weather(zip_code)
-    fetch_with_cache("realtime_weather_data_#{zip_code}") do
-      get_weather_data('/current.json', { q: zip_code })
-    end
-  end
+  # Returns realtime and forecast api data and cache status
+  def fetch_weather_data(zip_code)
+    cache_key = "weather_data_#{zip_code}"
 
-  # Fetches forecast weather data for a given zip code, with caching
-  # Params:
-  # - zip_code (String): The zip code for which to retrieve forecast data
-  def fetch_forecast_weather(zip_code)
-    fetch_with_cache("forecast_weather_data_#{zip_code}") do
-      get_weather_data('/forecast.json', { q: zip_code, days: 1 })
-    end
+    # Attempt to retrieve data from cache
+    cached_data = Rails.cache.read(cache_key)
+    return { data: cached_data, cached: true } if cached_data
+
+    # If not cached, fetch real-time and forecast data
+    real_time_data = get_weather_data('/current.json', { q: zip_code })
+    forecast_data = get_weather_data('/forecast.json', { q: zip_code, days: 1 })
+
+    # Combine data into one result
+    combined_data = {
+      current: real_time_data["current"],
+      forecast: forecast_data.dig("forecast", "forecastday", 0, "day")
+    }
+
+    # Store combined data in cache and return
+    Rails.cache.write(cache_key, combined_data, expires_in: @cache_duration)
+    { data: combined_data, cached: false }
   end
 
   private 
 
-  # Central method to handle caching logic
-  def fetch_with_cache(cache_key)
-    cached_data = Rails.cache.read(cache_key)
-    return { data: cached_data, cached: true } if cached_data
-
-    # Fetch new data, store in cache, and return
-    new_api_data = yield
-    Rails.cache.write(cache_key, new_api_data, expires_in: @cache_duration)
-    { data: new_api_data, cached: false }
-  end
-
-  # Makes a GET request to the specified weather API endpoint with the provided parameters
+  # Makes a GET requests to the specified weather API endpoint
+  # Params:
+  # - endpoint (String): API endpoint to hit (e.g., /current.json or /forecast.json)
+  # - params (Hash): Query parameters for the API request
   def get_weather_data(endpoint, params)
     response = self.class.get(endpoint, query: params.merge(key: ENV['WEATHER_API_KEY']))
-    # Parse, store in cache if success, log error if error
     response.success? ? response.parsed_response : log_error("Error fetching weather data: #{response.message}")
   end
 

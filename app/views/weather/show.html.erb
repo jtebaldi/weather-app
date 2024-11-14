@@ -1,7 +1,8 @@
 <h1>Here's the forecast</h1>
 
-<% if @weather_data %>
-  <p>Current Temperature: <%= @weather_data["current"]["temp_f"] %>&deg;F / <%= @weather_data["current"]["temp_c"] %>&deg;C</p>
+<% if @realtime_weather_data %>
+  <p>Current Temperature: <%= @realtime_weather_data["current"]["temp_f"] %>&deg;F / <%= @realtime_weather_data["current"]["temp_c"] %>&deg;C</p>
+  <p>(<strong>Data Source</strong> <%= @cached ? "Cached" : "Fresh from API" %>)</p>
 <% else %>
   <p>Sorry, current temperature could not be retrieved. Please try again.</p>
 <% end %>
